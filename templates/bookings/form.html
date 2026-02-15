@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block title %}Complete Your Booking - 508.dev Interview Service{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container" style="max-width: 600px;">
+        <div class="section-header">
+            <h1>Complete Your Booking</h1>
+            <p>Session with {{ interviewer.display_name }} on {{ scheduled_datetime|date:"F j, Y" }} at {{ scheduled_datetime|time:"g:i A" }}</p>
+        </div>
+
+        <form method="post"
+              action="{% url 'bookings:create' interviewer.id %}"
+              enctype="multipart/form-data"
+              class="booking-form">
+            {% csrf_token %}
+            <input type="hidden" name="scheduled_at" value="{{ scheduled_at }}">
+            <input type="hidden" name="duration_minutes" value="60">
+
+            <div class="form-group">
+                <label for="customer_name">Your Name *</label>
+                <input type="text"
+                       id="customer_name"
+                       name="customer_name"
+                       required
+                       placeholder="John Doe">
+            </div>
+
+            <div class="form-group">
+                <label for="customer_email">Your Email *</label>
+                <input type="email"
+                       id="customer_email"
+                       name="customer_email"
+                       required
+                       placeholder="john@example.com">
+                <p class="form-help">We'll send your booking confirmation here.</p>
+            </div>
+
+            <div class="form-group">
+                <label for="customer_background">Your Background *</label>
+                <textarea id="customer_background"
+                          name="customer_background"
+                          required
+                          placeholder="Tell us about your experience level, current role, and relevant skills..."></textarea>
+                <p class="form-help">This helps your interviewer tailor the session to your level.</p>
+            </div>
+
+            <div class="form-group">
+                <label for="interview_focus">What do you want to focus on? *</label>
+                <textarea id="interview_focus"
+                          name="interview_focus"
+                          required
+                          placeholder="e.g., System design for distributed systems, frontend coding in React, behavioral questions..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="target_companies">Target Companies</label>
+                <input type="text"
+                       id="target_companies"
+                       name="target_companies"
+                       placeholder="e.g., Google, Meta, startups...">
+                <p class="form-help">Optional: We can tailor the interview style to your target companies.</p>
+            </div>
+
+            <div class="form-group">
+                <label for="additional_info">Additional Information</label>
+                <textarea id="additional_info"
+                          name="additional_info"
+                          placeholder="Any other details you'd like to share..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="resume">Your Resume (optional)</label>
+                <input type="file"
+                       id="resume"
+                       name="resume"
+                       accept=".pdf,.doc,.docx">
+                <p class="form-help">Upload your resume to help your interviewer understand your background.</p>
+            </div>
+
+            <div style="background-color: var(--color-bg-alt); padding: 1rem; border-radius: var(--radius-md); margin-bottom: 1.5rem;">
+                <p style="font-weight: 600; margin-bottom: 0.5rem;">Session Details</p>
+                <p style="color: var(--color-text-light); font-size: 0.875rem;">
+                    Duration: 60 minutes<br>
+                    Rate: ${{ interviewer.hourly_rate }}/hour<br>
+                    <strong>Total: ${{ interviewer.hourly_rate }}</strong>
+                </p>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">
+                Continue to Payment
+            </button>
+
+            <p style="text-align: center; margin-top: 1rem; color: var(--color-text-light); font-size: 0.875rem;">
+                You'll be redirected to Stripe for secure payment.
+            </p>
+        </form>
+    </div>
+</section>
+{% endblock %}

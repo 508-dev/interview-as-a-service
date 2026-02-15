@@ -1,0 +1,55 @@
+<div class="modal-backdrop" onclick="this.remove()">
+    <div class="modal" onclick="event.stopPropagation()">
+        <div class="modal-header">
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <div class="interviewer-photo">
+                    {% if interviewer.photo %}
+                        <img src="{{ interviewer.photo.url }}" alt="{{ interviewer.display_name }}">
+                    {% else %}
+                        <div class="photo-placeholder">{{ interviewer.display_name|slice:":1" }}</div>
+                    {% endif %}
+                </div>
+                <div>
+                    <h2>{{ interviewer.display_name }}</h2>
+                    <p class="hourly-rate">${{ interviewer.hourly_rate }}/hour</p>
+                </div>
+            </div>
+            <button class="modal-close" onclick="this.closest('.modal-backdrop').remove()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <h4>About</h4>
+            <p style="margin-bottom: 1.5rem;">{{ interviewer.bio }}</p>
+
+            {% if interviewer.technologies.exists %}
+            <h4>Technologies</h4>
+            <div class="tags" style="margin-bottom: 1.5rem;">
+                {% for tech in interviewer.technologies.all %}
+                    <span class="tag tag-tech">{{ tech.name }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            {% if interviewer.subjects.exists %}
+            <h4>Interview Types</h4>
+            <div class="tags" style="margin-bottom: 1.5rem;">
+                {% for subject in interviewer.subjects.all %}
+                    <span class="tag tag-subject">{{ subject.name }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            {% if interviewer.company_list %}
+            <h4>Previous Companies</h4>
+            <p class="companies">
+                {% for company in interviewer.company_list %}
+                    <span class="company">{{ company }}</span>
+                {% endfor %}
+            </p>
+            {% endif %}
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="this.closest('.modal-backdrop').remove()">Close</button>
+            <a href="{% url 'bookings:start' interviewer.id %}" class="btn btn-primary">Book Now</a>
+        </div>
+    </div>
+</div>

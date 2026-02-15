@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Confirmed</title>
+</head>
+<body style="font-family: system-ui, -apple-system, sans-serif; line-height: 1.5; color: #1e293b; max-width: 600px; margin: 0 auto; padding: 20px;">
+    <div style="text-align: center; margin-bottom: 30px;">
+        <h1 style="color: #2563eb; margin-bottom: 10px;">508.dev Interview Service</h1>
+    </div>
+
+    <div style="background-color: #f8fafc; padding: 30px; border-radius: 12px; margin-bottom: 30px;">
+        <h2 style="margin-top: 0; color: #22c55e;">Your Interview is Confirmed!</h2>
+
+        <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+            <tr>
+                <td style="padding: 10px 0; border-bottom: 1px solid #e2e8f0;"><strong>Interviewer:</strong></td>
+                <td style="padding: 10px 0; border-bottom: 1px solid #e2e8f0;">{{ booking.interviewer.display_name }}</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px 0; border-bottom: 1px solid #e2e8f0;"><strong>Date:</strong></td>
+                <td style="padding: 10px 0; border-bottom: 1px solid #e2e8f0;">{{ booking.scheduled_at|date:"F j, Y" }}</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px 0; border-bottom: 1px solid #e2e8f0;"><strong>Time:</strong></td>
+                <td style="padding: 10px 0; border-bottom: 1px solid #e2e8f0;">{{ booking.scheduled_at|time:"g:i A" }} UTC</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px 0;"><strong>Duration:</strong></td>
+                <td style="padding: 10px 0;">{{ booking.duration_minutes }} minutes</td>
+            </tr>
+        </table>
+    </div>
+
+    <div style="margin-bottom: 30px;">
+        <h3>What You'll Focus On</h3>
+        <p style="background-color: #f8fafc; padding: 15px; border-radius: 8px;">{{ booking.interview_focus }}</p>
+    </div>
+
+    <div style="margin-bottom: 30px;">
+        <h3>What's Next?</h3>
+        <ol style="padding-left: 20px;">
+            <li style="margin-bottom: 10px;">Accept the calendar invite that will be sent separately</li>
+            <li style="margin-bottom: 10px;">Review common interview questions for your focus area</li>
+            <li style="margin-bottom: 10px;">Join the meeting link at your scheduled time</li>
+        </ol>
+    </div>
+
+    <div style="text-align: center; padding-top: 30px; border-top: 1px solid #e2e8f0; color: #64748b; font-size: 14px;">
+        <p>Thank you for booking with 508.dev Interview Service!</p>
+        <p>Questions? Reply to this email.</p>
+    </div>
+</body>
+</html>

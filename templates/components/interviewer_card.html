@@ -1,0 +1,26 @@
+<article class="interviewer-card"
+         hx-get="{% url 'interviewers:detail_modal' interviewer.id %}"
+         hx-target="#modal-container"
+         hx-swap="innerHTML">
+    <div class="interviewer-photo">
+        {% if interviewer.photo %}
+            <img src="{{ interviewer.photo.url }}" alt="{{ interviewer.display_name }}">
+        {% else %}
+            <div class="photo-placeholder">{{ interviewer.display_name|slice:":1" }}</div>
+        {% endif %}
+    </div>
+    <div class="interviewer-info">
+        <h3>{{ interviewer.display_name }}</h3>
+        <p class="hourly-rate">${{ interviewer.hourly_rate }}/hour</p>
+        <div class="tags">
+            {% for tech in interviewer.technologies.all|slice:":3" %}
+                <span class="tag tag-tech">{{ tech.name }}</span>
+            {% endfor %}
+        </div>
+        <div class="companies">
+            {% for company in interviewer.company_list|slice:":2" %}
+                <span class="company">{{ company }}</span>
+            {% endfor %}
+        </div>
+    </div>
+</article>

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Payment Cancelled - 508.dev Interview Service{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container" style="max-width: 600px; text-align: center;">
+        <div style="margin-bottom: 2rem;">
+            <div style="width: 80px; height: 80px; background-color: var(--color-warning); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem;">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </div>
+            <h1>Payment Cancelled</h1>
+        </div>
+
+        <p style="color: var(--color-text-light); margin-bottom: 2rem;">
+            Your payment was cancelled and no charges were made. You can try booking again whenever you're ready.
+        </p>
+
+        <div style="display: flex; gap: 1rem; justify-content: center;">
+            <a href="{% url 'interviewers:list' %}" class="btn btn-primary">Find an Interviewer</a>
+            <a href="{% url 'pages:home' %}" class="btn btn-secondary">Back to Home</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block title %}508.dev Interview Service - Practice with Top Engineers{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="container">
+        <h1>Ace Your Technical Interview</h1>
+        <p>Practice with engineers from Google, Meta, Amazon, and other top companies. Get real feedback. Land your dream job.</p>
+        <a href="{% url 'interviewers:list' %}" class="btn btn-primary btn-lg">Find an Interviewer</a>
+    </div>
+</section>
+
+<!-- How It Works -->
+<section class="section">
+    <div class="container">
+        <div class="section-header">
+            <h2>How It Works</h2>
+            <p>Get started in three simple steps</p>
+        </div>
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3>Choose Your Interviewer</h3>
+                <p>Browse our roster of experienced engineers. Filter by technology, interview type, or company background.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3>Book Your Session</h3>
+                <p>Pick a time that works for you. Share your background and what you want to focus on.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3>Practice & Improve</h3>
+                <p>Get a realistic interview experience with detailed feedback to help you land your dream job.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Interviewers -->
+<section class="section" style="background-color: var(--color-bg-alt);">
+    <div class="container">
+        <div class="section-header">
+            <h2>Featured Interviewers</h2>
+            <p>Learn from engineers at top companies</p>
+        </div>
+        <div class="interviewers-grid"
+             hx-get="{% url 'interviewers:featured' %}"
+             hx-trigger="load"
+             hx-swap="innerHTML">
+            <!-- Loaded via HTMX -->
+            <p>Loading interviewers...</p>
+        </div>
+        <div style="text-align: center; margin-top: 2rem;">
+            <a href="{% url 'interviewers:list' %}" class="btn btn-secondary">View All Interviewers</a>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials -->
+<section class="section">
+    <div class="container">
+        <div class="section-header">
+            <h2>What Our Clients Say</h2>
+        </div>
+        <div class="testimonials">
+            <div class="testimonial">
+                <p class="testimonial-text">"The mock interview was incredibly realistic. My interviewer gave me detailed feedback that helped me identify my weak spots. I ended up getting an offer from Google!"</p>
+                <p class="testimonial-author">Sarah K.</p>
+                <p class="testimonial-role">Software Engineer at Google</p>
+            </div>
+            <div class="testimonial">
+                <p class="testimonial-text">"After struggling with system design interviews, I booked a session focused on that topic. The insights I gained were invaluable. Highly recommend!"</p>
+                <p class="testimonial-author">Michael T.</p>
+                <p class="testimonial-role">Senior Engineer at Stripe</p>
+            </div>
+            <div class="testimonial">
+                <p class="testimonial-text">"The flexibility to choose my interviewer based on their background made all the difference. I practiced with someone who had experience at my target company."</p>
+                <p class="testimonial-author">Emily R.</p>
+                <p class="testimonial-role">Staff Engineer at Meta</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Companies Section -->
+<section class="section companies-section" style="background-color: var(--color-bg-alt);">
+    <div class="container">
+        <div class="section-header">
+            <h2>Our Interviewers Have Worked At</h2>
+        </div>
+        <div class="company-logos">
+            <span>Google</span>
+            <span>Meta</span>
+            <span>Amazon</span>
+            <span>Apple</span>
+            <span>Microsoft</span>
+            <span>Netflix</span>
+            <span>Stripe</span>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="section">
+    <div class="container" style="text-align: center;">
+        <h2>Ready to Ace Your Next Interview?</h2>
+        <p style="margin-bottom: 2rem; color: var(--color-text-light);">Book a session with a top engineer today.</p>
+        <a href="{% url 'interviewers:list' %}" class="btn btn-primary btn-lg">Get Started</a>
+    </div>
+</section>
+{% endblock %}

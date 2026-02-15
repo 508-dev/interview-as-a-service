@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Book {{ interviewer.display_name }} - 508.dev Interview Service{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container" style="max-width: 800px;">
+        <div class="section-header">
+            <h1>Book a Session with {{ interviewer.display_name }}</h1>
+            <p>${{ interviewer.hourly_rate }}/hour</p>
+        </div>
+
+        <div style="margin-bottom: 2rem;">
+            <p style="text-align: center; color: var(--color-text-light);">
+                Select a time slot that works for you:
+            </p>
+        </div>
+
+        <!-- Cal.com Embed -->
+        <div id="cal-embed" style="min-height: 600px; border: 1px solid var(--color-border); border-radius: var(--radius-lg); overflow: hidden;">
+            <!-- Cal.com inline embed -->
+            <iframe
+                src="https://cal.com/{{ interviewer.cal_event_type_id }}?embed=true&theme=light"
+                style="width: 100%; height: 600px; border: none;"
+                loading="lazy">
+            </iframe>
+        </div>
+
+        <div style="margin-top: 2rem; text-align: center;">
+            <p style="color: var(--color-text-light); font-size: 0.875rem;">
+                After selecting a time, you'll be redirected to fill in your details and complete payment.
+            </p>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Listen for cal.com postMessage events to capture selected time
+window.addEventListener('message', function(event) {
+    // Check if the message is from cal.com
+    if (event.data && event.data.type === 'cal:booking_successful') {
+        const bookingData = event.data.data;
+        // Redirect to the booking form with the selected datetime
+        window.location.href = '{% url "bookings:form" interviewer.id %}?datetime=' + encodeURIComponent(bookingData.startTime);
+    }
+});
+</script>
+{% endblock %}

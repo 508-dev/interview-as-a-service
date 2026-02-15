@@ -1,0 +1,22 @@
+<header class="navbar">
+    <div class="container navbar-content">
+        <a href="{% url 'pages:home' %}" class="logo">
+            <span class="logo-text">508.dev</span>
+            <span class="logo-subtitle">Interview Service</span>
+        </a>
+        <nav class="nav-links">
+            <a href="{% url 'interviewers:list' %}">Find an Interviewer</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'dashboard:home' %}">Dashboard</a>
+                <a href="{% url 'accounts:logout' %}">Logout</a>
+            {% else %}
+                <a href="{% url 'accounts:login' %}">Interviewer Login</a>
+            {% endif %}
+        </nav>
+        <button class="mobile-menu-btn" aria-label="Toggle menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </div>
+</header>

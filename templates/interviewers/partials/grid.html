@@ -1,0 +1,7 @@
+{% for interviewer in interviewers %}
+    {% include "components/interviewer_card.html" %}
+{% empty %}
+    <p style="grid-column: 1 / -1; text-align: center; color: var(--color-text-light);">
+        No interviewers found matching your criteria.
+    </p>
+{% endfor %}

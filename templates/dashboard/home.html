@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - 508.dev Interview Service{% endblock %}
+
+{% block content %}
+<div class="dashboard-layout">
+    {% include "dashboard/partials/sidebar.html" %}
+
+    <div class="dashboard-content">
+        <div class="dashboard-header">
+            <h1>Welcome, {{ interviewer.display_name }}</h1>
+            <p style="color: var(--color-text-light);">Here's an overview of your upcoming sessions.</p>
+        </div>
+
+        <section style="margin-bottom: 3rem;">
+            <h2 style="margin-bottom: 1rem;">Upcoming Interviews</h2>
+            {% if upcoming_bookings %}
+                <div class="bookings-list">
+                    {% for booking in upcoming_bookings %}
+                        <div class="booking-card">
+                            <div class="booking-info">
+                                <h4>{{ booking.customer_name }}</h4>
+                                <p class="booking-date">
+                                    {{ booking.scheduled_at|date:"F j, Y" }} at {{ booking.scheduled_at|time:"g:i A" }}
+                                    &bull; {{ booking.duration_minutes }} min
+                                </p>
+                                <p style="font-size: 0.875rem; color: var(--color-text-light); margin-top: 0.5rem;">
+                                    Focus: {{ booking.interview_focus|truncatewords:15 }}
+                                </p>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 1rem;">
+                                <span class="booking-status status-{{ booking.status }}">
+                                    {{ booking.get_status_display }}
+                                </span>
+                                <a href="{% url 'dashboard:booking_detail' booking.id %}" class="btn btn-secondary">
+                                    View Details
+                                </a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div style="background-color: var(--color-bg-alt); padding: 2rem; border-radius: var(--radius-md); text-align: center;">
+                    <p style="color: var(--color-text-light);">No upcoming interviews scheduled.</p>
+                </div>
+            {% endif %}
+        </section>
+
+        {% if past_bookings %}
+        <section>
+            <h2 style="margin-bottom: 1rem;">Recent Past Sessions</h2>
+            <div class="bookings-list">
+                {% for booking in past_bookings %}
+                    <div class="booking-card">
+                        <div class="booking-info">
+                            <h4>{{ booking.customer_name }}</h4>
+                            <p class="booking-date">
+                                {{ booking.scheduled_at|date:"F j, Y" }} at {{ booking.scheduled_at|time:"g:i A" }}
+                            </p>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <span class="booking-status status-{{ booking.status }}">
+                                {{ booking.get_status_display }}
+                            </span>
+                            <a href="{% url 'dashboard:booking_detail' booking.id %}" class="btn btn-secondary">
+                                View
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

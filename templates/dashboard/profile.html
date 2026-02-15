@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Profile - 508.dev Interview Service{% endblock %}
+
+{% block content %}
+<div class="dashboard-layout">
+    {% include "dashboard/partials/sidebar.html" %}
+
+    <div class="dashboard-content">
+        <div class="dashboard-header">
+            <h1>Edit Your Profile</h1>
+            <p style="color: var(--color-text-light);">Update your information to attract more clients.</p>
+        </div>
+
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <div class="message message-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <form method="post"
+              enctype="multipart/form-data"
+              hx-post="{% url 'dashboard:profile' %}"
+              hx-swap="outerHTML"
+              style="max-width: 600px;">
+            {% csrf_token %}
+            {% include "dashboard/partials/profile_form.html" %}
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Booking Confirmed - 508.dev Interview Service{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container" style="max-width: 600px; text-align: center;">
+        <div style="margin-bottom: 2rem;">
+            <div style="width: 80px; height: 80px; background-color: var(--color-success); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem;">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+            </div>
+            <h1>Booking Confirmed!</h1>
+        </div>
+
+        {% if booking %}
+        <div style="background-color: var(--color-bg-alt); padding: 2rem; border-radius: var(--radius-lg); text-align: left; margin-bottom: 2rem;">
+            <h3 style="margin-bottom: 1rem;">Booking Details</h3>
+            <p><strong>Interviewer:</strong> {{ booking.interviewer.display_name }}</p>
+            <p><strong>Date:</strong> {{ booking.scheduled_at|date:"F j, Y" }}</p>
+            <p><strong>Time:</strong> {{ booking.scheduled_at|time:"g:i A" }}</p>
+            <p><strong>Duration:</strong> {{ booking.duration_minutes }} minutes</p>
+        </div>
+        {% endif %}
+
+        <div style="margin-bottom: 2rem;">
+            <h3>What's Next?</h3>
+            <ul style="text-align: left; list-style: none; margin-top: 1rem;">
+                <li style="padding: 0.75rem 0; border-bottom: 1px solid var(--color-border);">
+                    <strong>1. Check your email</strong><br>
+                    <span style="color: var(--color-text-light);">We've sent you a confirmation email with all the details.</span>
+                </li>
+                <li style="padding: 0.75rem 0; border-bottom: 1px solid var(--color-border);">
+                    <strong>2. Accept the calendar invite</strong><br>
+                    <span style="color: var(--color-text-light);">You'll receive a calendar invite with the meeting link.</span>
+                </li>
+                <li style="padding: 0.75rem 0;">
+                    <strong>3. Prepare for your session</strong><br>
+                    <span style="color: var(--color-text-light);">Review common interview questions for your focus area.</span>
+                </li>
+            </ul>
+        </div>
+
+        <a href="{% url 'pages:home' %}" class="btn btn-primary">Back to Home</a>
+    </div>
+</section>
+{% endblock %}

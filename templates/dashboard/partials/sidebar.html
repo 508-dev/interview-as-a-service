@@ -1,0 +1,30 @@
+<aside class="dashboard-sidebar">
+    <nav>
+        <ul class="dashboard-nav">
+            <li>
+                <a href="{% url 'dashboard:home' %}" {% if request.resolver_match.url_name == 'home' %}class="active"{% endif %}>
+                    Dashboard
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'dashboard:profile' %}" {% if request.resolver_match.url_name == 'profile' %}class="active"{% endif %}>
+                    Edit Profile
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--color-border);">
+        <p style="font-size: 0.875rem; color: var(--color-text-light); margin-bottom: 0.5rem;">Your Rate</p>
+        <p style="font-weight: 600; color: var(--color-primary);">${{ user.interviewer.hourly_rate }}/hour</p>
+    </div>
+
+    <div style="margin-top: 1rem;">
+        <p style="font-size: 0.875rem; color: var(--color-text-light); margin-bottom: 0.5rem;">Status</p>
+        {% if user.interviewer.is_active %}
+            <span class="tag tag-subject">Active</span>
+        {% else %}
+            <span class="tag">Inactive</span>
+        {% endif %}
+    </div>
+</aside>

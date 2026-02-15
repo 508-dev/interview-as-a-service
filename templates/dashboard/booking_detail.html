@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}Booking Details - 508.dev Interview Service{% endblock %}
+
+{% block content %}
+<div class="dashboard-layout">
+    {% include "dashboard/partials/sidebar.html" %}
+
+    <div class="dashboard-content">
+        <div class="dashboard-header">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <a href="{% url 'dashboard:home' %}" style="color: var(--color-text-light); font-size: 0.875rem;">&larr; Back to Dashboard</a>
+                    <h1 style="margin-top: 0.5rem;">Booking with {{ booking.customer_name }}</h1>
+                </div>
+                <span class="booking-status status-{{ booking.status }}">
+                    {{ booking.get_status_display }}
+                </span>
+            </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;">
+            <div>
+                <section style="background-color: var(--color-bg-alt); padding: 1.5rem; border-radius: var(--radius-lg); margin-bottom: 1.5rem;">
+                    <h3 style="margin-bottom: 1rem;">Session Details</h3>
+                    <table style="width: 100%;">
+                        <tr>
+                            <td style="padding: 0.5rem 0; color: var(--color-text-light);">Date & Time</td>
+                            <td style="padding: 0.5rem 0;">{{ booking.scheduled_at|date:"F j, Y" }} at {{ booking.scheduled_at|time:"g:i A" }}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 0.5rem 0; color: var(--color-text-light);">Duration</td>
+                            <td style="padding: 0.5rem 0;">{{ booking.duration_minutes }} minutes</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 0.5rem 0; color: var(--color-text-light);">Customer Email</td>
+                            <td style="padding: 0.5rem 0;"><a href="mailto:{{ booking.customer_email }}">{{ booking.customer_email }}</a></td>
+                        </tr>
+                    </table>
+                </section>
+
+                <section style="margin-bottom: 1.5rem;">
+                    <h3 style="margin-bottom: 1rem;">Customer Background</h3>
+                    <p style="white-space: pre-wrap;">{{ booking.customer_background }}</p>
+                </section>
+
+                <section style="margin-bottom: 1.5rem;">
+                    <h3 style="margin-bottom: 1rem;">Interview Focus</h3>
+                    <p style="white-space: pre-wrap;">{{ booking.interview_focus }}</p>
+                </section>
+
+                {% if booking.target_companies %}
+                <section style="margin-bottom: 1.5rem;">
+                    <h3 style="margin-bottom: 1rem;">Target Companies</h3>
+                    <p>{{ booking.target_companies }}</p>
+                </section>
+                {% endif %}
+
+                {% if booking.additional_info %}
+                <section style="margin-bottom: 1.5rem;">
+                    <h3 style="margin-bottom: 1rem;">Additional Information</h3>
+                    <p style="white-space: pre-wrap;">{{ booking.additional_info }}</p>
+                </section>
+                {% endif %}
+            </div>
+
+            <div>
+                {% if booking.resume %}
+                <section style="background-color: var(--color-bg-alt); padding: 1.5rem; border-radius: var(--radius-lg); margin-bottom: 1.5rem;">
+                    <h3 style="margin-bottom: 1rem;">Resume</h3>
+                    <a href="{{ booking.resume.url }}" class="btn btn-secondary" style="width: 100%;" download>
+                        Download Resume
+                    </a>
+                </section>
+                {% endif %}
+
+                <section style="background-color: var(--color-bg-alt); padding: 1.5rem; border-radius: var(--radius-lg);">
+                    <h3 style="margin-bottom: 1rem;">Actions</h3>
+
+                    {% if booking.status == 'confirmed' %}
+                    <form method="post" action="{% url 'dashboard:booking_complete' booking.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">
+                            Mark as Completed
+                        </button>
+                    </form>
+                    {% endif %}
+
+                    <a href="mailto:{{ booking.customer_email }}" class="btn btn-secondary" style="width: 100%; margin-top: 0.5rem;">
+                        Email Customer
+                    </a>
+                </section>
+
+                <section style="margin-top: 1.5rem; font-size: 0.875rem; color: var(--color-text-light);">
+                    <p>Booked on {{ booking.created_at|date:"F j, Y" }}</p>
+                    {% if booking.stripe_payment_intent_id %}
+                    <p>Payment ID: {{ booking.stripe_payment_intent_id|truncatechars:20 }}</p>
+                    {% endif %}
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

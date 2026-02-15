@@ -1,0 +1,38 @@
+[project]
+name = "interview-service"
+version = "0.1.0"
+description = "Interview-as-a-Service platform for 508.dev"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "django>=5.1",
+    "psycopg[binary]>=3.2",
+    "django-storages[s3]>=1.14",
+    "boto3>=1.35",
+    "stripe>=11.0",
+    "whitenoise>=6.8",
+    "pillow>=11.0",
+    "gunicorn>=23.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3",
+    "pytest-django>=4.9",
+    "factory-boy>=3.3",
+    "django-browser-reload>=1.16",
+    "playwright>=1.49",
+    "pytest-playwright>=0.6",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "interview_service.settings.dev"
+python_files = ["test_*.py"]
+testpaths = ["tests"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["interview_service", "accounts", "interviewers", "bookings", "dashboard", "pages"]

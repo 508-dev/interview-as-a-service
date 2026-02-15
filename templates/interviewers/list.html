@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Find an Interviewer - 508.dev Interview Service{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <div class="section-header">
+            <h1>Find Your Interviewer</h1>
+            <p>Choose from our roster of experienced engineers</p>
+        </div>
+
+        <!-- Filters -->
+        <div class="filters">
+            <div class="filter-group">
+                <label for="technology-filter">Technology</label>
+                <select id="technology-filter"
+                        name="technology"
+                        hx-get="{% url 'interviewers:list' %}"
+                        hx-target="#interviewers-grid"
+                        hx-swap="innerHTML"
+                        hx-include="[name='subject']">
+                    <option value="">All Technologies</option>
+                    {% for tech in technologies %}
+                        <option value="{{ tech.slug }}" {% if selected_tech == tech.slug %}selected{% endif %}>
+                            {{ tech.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="subject-filter">Interview Type</label>
+                <select id="subject-filter"
+                        name="subject"
+                        hx-get="{% url 'interviewers:list' %}"
+                        hx-target="#interviewers-grid"
+                        hx-swap="innerHTML"
+                        hx-include="[name='technology']">
+                    <option value="">All Types</option>
+                    {% for subject in subjects %}
+                        <option value="{{ subject.slug }}" {% if selected_subject == subject.slug %}selected{% endif %}>
+                            {{ subject.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <!-- Interviewers Grid -->
+        <div id="interviewers-grid" class="interviewers-grid">
+            {% include "interviewers/partials/grid.html" %}
+        </div>
+    </div>
+</section>
+{% endblock %}
