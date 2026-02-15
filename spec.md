@@ -49,32 +49,28 @@ On the admin panel, an interviewer can see their upcoming interviews, edit the p
 
 ## Implementation Details
 
-### Unanswered Questions
-
-The following details are as of yet undecided. An LLM viewing these questions should guide the engineer building this app with options for the below questions, record the decision within the implementation details section, and remove questions from the list once a decision has been made.
-
-1. In Django, how can a user attach a pdf during payment flow in such a way that it can be viewed by an interviewer using the admin portal later?
-
-2. How can we send custom confirmation emails from our app after payment concludes?
-
-3. How do we associate each interviewer with their associated cal.com account, and represent that to the app?
-
-4. What's a good way to get dev hot reloading for an HTMX app?
-
-5. In prod, how should the HTMX frontend be served?
-
-6. How should frontend testing be done?
-
-7. How should backend testing be done?
-
 ### Decisions
 
-The app is a django / htmx app. CSS is styled without any libraries. Only modern browsers are targeted. A postgresql DB is used.
+**Stack:** Django + HTMX app. CSS is styled without any libraries. Only modern browsers are targeted. PostgreSQL DB.
 
-For development, a docker compose dev file is used to spin up a postgres db, that the django dev app can connect to. The HTMX frontend can be served in some way that allows hot reloading.
+**File Storage:** MinIO deployed via Coolify (S3-compatible). Resume PDFs uploaded during booking flow are stored in MinIO using `django-storages` with S3 backend. Interviewers can view these files from the admin panel.
 
-For deployment, a docker compose prod version is available that bundles the DB and backend together, as well as builds the frontend. The frontend is then [UNDECIDED].
+**Email:** Django's built-in email backend with an SMTP transactional email service (e.g., Resend or Mailgun). Confirmation emails sent after successful Stripe payment.
 
-Any javascript necessary is typescript.
+**Cal.com Integration:** Each interviewer has a `cal_event_type_id` field stored in their profile. The booking page embeds the cal.com widget for that specific Event Type.
 
-The app will be deployed on push to main via coolify.
+**Development:**
+- Docker Compose dev file spins up PostgreSQL and MinIO
+- `django-browser-reload` for automatic browser refresh on file changes
+- Standard `python manage.py runserver` for Django
+
+**Production:**
+- Docker Compose bundles PostgreSQL, MinIO, and Django
+- WhiteNoise serves static files directly from Django (no separate Nginx needed)
+- Deployed on push to main via Coolify
+
+**Testing:**
+- Backend: `pytest` + `pytest-django` with `factory_boy` for model factories
+- Frontend/E2E: Playwright for browser testing of HTMX interactions
+
+**TypeScript:** Any JavaScript necessary is TypeScript.
