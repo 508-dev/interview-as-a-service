@@ -11,3 +11,8 @@ def home(request):
         "pages/home.html",
         {"featured_interviewers": featured_interviewers},
     )
+
+
+def about(request):
+    """About 508.dev page."""
+    return render(request, "pages/about.html")
