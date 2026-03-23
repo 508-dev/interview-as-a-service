@@ -28,10 +28,12 @@ DATABASES = {
 
 # WhiteNoise for static files
 MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")  # noqa: F405
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # MinIO / S3 storage for media files
-DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+STORAGES = {
+    "default": {"BACKEND": "storages.backends.s3boto3.S3Boto3Storage"},
+    "staticfiles": {"BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"},
+}
 AWS_ACCESS_KEY_ID = os.environ.get("MINIO_ACCESS_KEY")
 AWS_SECRET_ACCESS_KEY = os.environ.get("MINIO_SECRET_KEY")
 AWS_STORAGE_BUCKET_NAME = os.environ.get("MINIO_BUCKET_NAME", "interview-service")
