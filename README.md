@@ -7,7 +7,8 @@ A Django + HTMX web application for 508.dev's interview service. Users can brows
 - **Backend**: Django 5.1, PostgreSQL
 - **Frontend**: HTMX, vanilla CSS (no frameworks)
 - **Payments**: Stripe Checkout
-- **Scheduling**: Cal.com embed
+- **Scheduling**: Cal.com embed (client-side embed, no API key required)
+- **Email**: Mailgun API (via django-anymail)
 - **Storage**: MinIO (S3-compatible) for file uploads
 - **Testing**: pytest, pytest-django, factory-boy, Playwright
 
@@ -277,7 +278,7 @@ pytest e2e/ --headed
 - Domain name with SSL certificate
 - Stripe account (live keys)
 - Cal.com account
-- SMTP server for emails
+- Mailgun account with a verified sending domain
 
 ### 1. Configure Production Environment
 
@@ -312,14 +313,9 @@ STRIPE_SECRET_KEY=sk_live_...
 STRIPE_PUBLISHABLE_KEY=pk_live_...
 STRIPE_WEBHOOK_SECRET=whsec_...
 
-# Cal.com
-CAL_COM_API_KEY=your-cal-com-api-key
-
-# Email (SMTP)
-EMAIL_HOST=smtp.mailgun.org
-EMAIL_PORT=587
-EMAIL_HOST_USER=postmaster@example.com
-EMAIL_HOST_PASSWORD=your-smtp-password
+# Email (Mailgun API)
+MAILGUN_API_KEY=your-mailgun-api-key
+MAILGUN_SENDER_DOMAIN=mg.example.com  # your verified Mailgun sending domain
 DEFAULT_FROM_EMAIL=noreply@example.com
 
 # Security
