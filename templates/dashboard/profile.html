@@ -23,6 +23,7 @@
         <form method="post"
               enctype="multipart/form-data"
               hx-post="{% url 'dashboard:profile' %}"
+              hx-target="#profile-form-content"
               hx-swap="outerHTML"
               style="max-width: 600px;">
             {% csrf_token %}
