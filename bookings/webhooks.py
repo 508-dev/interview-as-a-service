@@ -1,5 +1,7 @@
 """Stripe webhook handlers."""
 
+import logging
+
 import stripe
 from django.conf import settings
 from django.http import HttpResponse
@@ -8,6 +10,8 @@ from django.views.decorators.http import require_POST
 
 from .emails import send_customer_confirmation, send_interviewer_notification
 from .models import Booking
+
+logger = logging.getLogger(__name__)
 
 
 @csrf_exempt
@@ -36,7 +40,7 @@ def stripe_webhook(request):
 
 def handle_checkout_completed(session):
     """Handle successful checkout completion."""
-    booking_id = session.get("metadata", {}).get("booking_id")
+    booking_id = getattr(session.metadata, "booking_id", None)
 
     if not booking_id:
         return
@@ -48,9 +52,13 @@ def handle_checkout_completed(session):
 
     # Update booking status
     booking.status = Booking.Status.CONFIRMED
-    booking.stripe_payment_intent_id = session.get("payment_intent", "")
+    booking.stripe_payment_intent_id = session.payment_intent or ""
     booking.save()
 
     # Send confirmation emails
-    send_customer_confirmation(booking)
-    send_interviewer_notification(booking)
+    try:
+        send_customer_confirmation(booking)
+        send_interviewer_notification(booking)
+    except Exception:
+        logger.exception("Failed to send booking confirmation emails for booking %s", booking.id)
+        raise

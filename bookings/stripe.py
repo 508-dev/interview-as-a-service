@@ -13,8 +13,9 @@ def create_checkout_session(booking, request):
 
     Returns the checkout session object.
     """
-    success_url = request.build_absolute_uri(
-        reverse("bookings:success") + f"?session_id={{CHECKOUT_SESSION_ID}}"
+    success_url = (
+        request.build_absolute_uri(reverse("bookings:success"))
+        + "?session_id={CHECKOUT_SESSION_ID}"
     )
     cancel_url = request.build_absolute_uri(
         reverse("bookings:cancel") + f"?booking_id={booking.id}"

@@ -35,7 +35,6 @@ Thank you for booking with 508.dev Interview Service!
         from_email=settings.DEFAULT_FROM_EMAIL,
         recipient_list=[booking.customer_email],
         html_message=html_message,
-        fail_silently=True,
     )
 
 
@@ -77,5 +76,4 @@ Log in to your dashboard to view more details and download their resume (if prov
         from_email=settings.DEFAULT_FROM_EMAIL,
         recipient_list=[booking.interviewer.user.email],
         html_message=html_message,
-        fail_silently=True,
     )
