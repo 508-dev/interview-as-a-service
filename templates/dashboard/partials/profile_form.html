@@ -1,4 +1,10 @@
 <div id="profile-form-content" class="profile-form-content">
+    {% if not interviewer.is_bookable %}
+    <div class="message message-error">
+        Your profile is hidden from the public site until you set a Cal.com Event Type ID below.
+    </div>
+    {% endif %}
+
     <div class="form-group">
         <label>Current Photo</label>
         <div style="display: flex; align-items: center; gap: 1rem;">
@@ -40,6 +46,16 @@
                value="{{ interviewer.hourly_rate }}"
                min="0"
                step="0.01">
+    </div>
+
+    <div class="form-group">
+        <label for="cal_event_type_id">Cal.com Event Type ID</label>
+        <input type="text"
+               id="cal_event_type_id"
+               name="cal_event_type_id"
+               value="{{ interviewer.cal_event_type_id }}"
+               placeholder="e.g. 123456">
+        <p class="form-help">Found in your Cal.com event type's URL or settings. Required for your profile to appear on the public site.</p>
     </div>
 
     <div class="form-group">

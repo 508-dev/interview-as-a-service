@@ -55,6 +55,7 @@ def profile_edit(request):
         interviewer.bio = request.POST.get("bio", interviewer.bio)
         interviewer.companies = request.POST.get("companies", interviewer.companies)
         interviewer.hourly_rate = request.POST.get("hourly_rate", interviewer.hourly_rate)
+        interviewer.cal_event_type_id = request.POST.get("cal_event_type_id", interviewer.cal_event_type_id).strip()
 
         # Handle photo upload
         if "photo" in request.FILES:

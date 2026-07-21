@@ -53,7 +53,9 @@ class Interviewer(models.Model):
     photo = models.ImageField(upload_to="interviewers/", blank=True)
     cal_event_type_id = models.CharField(
         max_length=100,
-        help_text="Cal.com Event Type ID for booking",
+        blank=True,
+        default="",
+        help_text="Cal.com Event Type ID for booking. Profile is hidden from the public site until this is set.",
     )
     hourly_rate = models.DecimalField(
         max_digits=6,
@@ -110,6 +112,10 @@ class Interviewer(models.Model):
     @property
     def has_accepted_current_tos(self):
         return self.tos_accepted_version == CURRENT_TOS_VERSION
+
+    @property
+    def is_bookable(self):
+        return self.is_active and bool(self.cal_event_type_id)
 
     @property
     def company_list(self):

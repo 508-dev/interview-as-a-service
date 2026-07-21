@@ -37,6 +37,11 @@ class TestInterviewersList:
         assert active.display_name.encode() in response.content
         assert inactive.display_name.encode() not in response.content
 
+    def test_list_hides_interviewer_without_cal_event_type_id(self, client):
+        unconfigured = InterviewerFactory(cal_event_type_id="")
+        response = client.get(reverse("interviewers:list"))
+        assert unconfigured.display_name.encode() not in response.content
+
     def test_filter_by_technology(self, client):
         tech = TechnologyFactory(name="Python", slug="python")
         with_tech = InterviewerFactory(technologies=[tech])
@@ -83,6 +88,13 @@ class TestInterviewerDetailModal:
         )
         assert response.status_code == 404
 
+    def test_modal_404_without_cal_event_type_id(self, client):
+        interviewer = InterviewerFactory(cal_event_type_id="")
+        response = client.get(
+            reverse("interviewers:detail_modal", kwargs={"pk": interviewer.pk})
+        )
+        assert response.status_code == 404
+
 
 @pytest.mark.django_db
 class TestBookingViews:
@@ -92,6 +104,13 @@ class TestBookingViews:
             reverse("bookings:start", kwargs={"interviewer_id": interviewer.pk})
         )
         assert response.status_code == 200
+
+    def test_booking_start_404_without_cal_event_type_id(self, client):
+        interviewer = InterviewerFactory(cal_event_type_id="")
+        response = client.get(
+            reverse("bookings:start", kwargs={"interviewer_id": interviewer.pk})
+        )
+        assert response.status_code == 404
 
     def test_booking_form_requires_datetime(self, client):
         interviewer = InterviewerFactory()
@@ -133,6 +152,28 @@ class TestDashboardViews:
         client.force_login(interviewer.user)
         response = client.get(reverse("dashboard:profile"))
         assert response.status_code == 200
+
+    def test_profile_edit_shows_visibility_warning_without_cal_event_type_id(self, client, interviewer):
+        interviewer.cal_event_type_id = ""
+        interviewer.save()
+        client.force_login(interviewer.user)
+        response = client.get(reverse("dashboard:profile"))
+        assert b"hidden from the public site" in response.content
+
+    def test_profile_edit_updates_cal_event_type_id(self, client, interviewer):
+        client.force_login(interviewer.user)
+        response = client.post(
+            reverse("dashboard:profile"),
+            {
+                "bio": interviewer.bio,
+                "companies": interviewer.companies,
+                "hourly_rate": str(interviewer.hourly_rate),
+                "cal_event_type_id": "999999",
+            },
+        )
+        assert response.status_code == 302
+        interviewer.refresh_from_db()
+        assert interviewer.cal_event_type_id == "999999"
 
     def test_booking_detail_loads(self, client, interviewer):
         booking = BookingFactory(interviewer=interviewer)
