@@ -23,6 +23,3 @@ DATABASES = {
 # Django browser reload
 INSTALLED_APPS += ["django_browser_reload"]  # noqa: F405
 MIDDLEWARE += ["django_browser_reload.middleware.BrowserReloadMiddleware"]  # noqa: F405
-
-# Use local file storage in development
-DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
