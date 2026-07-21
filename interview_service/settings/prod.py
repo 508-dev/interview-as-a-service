@@ -47,6 +47,15 @@ AWS_DEFAULT_ACL = None
 AWS_S3_SIGNATURE_VERSION = "s3v4"
 AWS_S3_REGION_NAME = "us-east-1"
 
+# AWS_S3_ENDPOINT_URL above is MinIO's internal Docker network address
+# (e.g. http://minio:9000), which browsers can't resolve, so presigned URLs
+# built against it 404 for real users. The bucket is public-read (see
+# docker-compose's createbucket step), so skip signing and instead route
+# public URLs through nginx's /minio-media/ proxy (see nginx.conf), which
+# forwards to MinIO over the same internal network.
+AWS_QUERYSTRING_AUTH = False
+AWS_S3_CUSTOM_DOMAIN = f"{ALLOWED_HOSTS[0]}/minio-media/{AWS_STORAGE_BUCKET_NAME}"
+
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
