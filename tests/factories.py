@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 
 from bookings.models import Booking
-from interviewers.models import HumanLanguage, Interviewer, InterviewSubject, Technology
+from interviewers.models import CURRENT_TOS_VERSION, HumanLanguage, Interviewer, InterviewSubject, Technology
 
 
 class UserFactory(factory.django.DjangoModelFactory):
@@ -56,6 +56,8 @@ class InterviewerFactory(factory.django.DjangoModelFactory):
     hourly_rate = Decimal("150.00")
     is_active = True
     companies = "Google, Meta, Amazon"
+    tos_accepted_version = CURRENT_TOS_VERSION
+    tos_accepted_at = factory.LazyAttribute(lambda obj: timezone.now() if obj.tos_accepted_version else None)
 
     @factory.post_generation
     def technologies(self, create, extracted, **kwargs):

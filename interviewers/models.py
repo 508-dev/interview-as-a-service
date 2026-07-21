@@ -1,6 +1,9 @@
 from django.contrib.auth.models import User
 from django.db import models
 
+# Bump this whenever the Interviewer ToS text changes to re-prompt everyone.
+CURRENT_TOS_VERSION = "1"
+
 
 class Technology(models.Model):
     """Technologies that interviewers are proficient in (React, Python, etc.)"""
@@ -80,6 +83,17 @@ class Interviewer(models.Model):
         blank=True,
         help_text="Comma-separated list of companies worked at",
     )
+    tos_accepted_version = models.CharField(
+        max_length=20,
+        blank=True,
+        default="",
+        help_text="Version of the Interviewer ToS this interviewer has accepted",
+    )
+    tos_accepted_at = models.DateTimeField(
+        null=True,
+        blank=True,
+        help_text="When the interviewer accepted the current ToS version",
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -92,6 +106,10 @@ class Interviewer(models.Model):
     @property
     def display_name(self):
         return self.user.get_full_name() or self.user.username
+
+    @property
+    def has_accepted_current_tos(self):
+        return self.tos_accepted_version == CURRENT_TOS_VERSION
 
     @property
     def company_list(self):
