@@ -2,6 +2,10 @@ FROM python:3.12-slim
 
 WORKDIR /app
 
+# Ensure every process in this image (gunicorn, entrypoint.sh's management
+# commands) uses prod settings; manage.py otherwise falls back to dev.
+ENV DJANGO_SETTINGS_MODULE=interview_service.settings.prod
+
 # 1. Install system deps (including libpq-dev for psycopg)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
