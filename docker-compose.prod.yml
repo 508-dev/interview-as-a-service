@@ -51,6 +51,7 @@ services:
       /bin/sh -c "
       mc alias set myminio http://minio:9000 $${MINIO_ACCESS_KEY} $${MINIO_SECRET_KEY};
       mc mb myminio/$${MINIO_BUCKET_NAME} --ignore-existing;
+      mc anonymous set public myminio/$${MINIO_BUCKET_NAME};
       exit 0;
       "
 
