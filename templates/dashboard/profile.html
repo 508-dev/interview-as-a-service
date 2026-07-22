@@ -29,6 +29,19 @@
             {% csrf_token %}
             {% include "dashboard/partials/profile_form.html" %}
         </form>
+
+        <div class="dashboard-header" style="margin-top: 3rem;">
+            <h2>Change Password</h2>
+        </div>
+
+        <form method="post"
+              hx-post="{% url 'dashboard:password_change' %}"
+              hx-target="#password-form-content"
+              hx-swap="outerHTML"
+              style="max-width: 600px;">
+            {% csrf_token %}
+            {% include "dashboard/partials/password_form.html" %}
+        </form>
     </div>
 </div>
 {% endblock %}

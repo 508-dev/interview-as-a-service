@@ -175,6 +175,47 @@ class TestDashboardViews:
         interviewer.refresh_from_db()
         assert interviewer.cal_event_type_id == "999999"
 
+    def test_password_change_updates_password(self, client, interviewer):
+        client.force_login(interviewer.user)
+        response = client.post(
+            reverse("dashboard:password_change"),
+            {
+                "old_password": "testpass123",
+                "new_password1": "newpass456!",
+                "new_password2": "newpass456!",
+            },
+        )
+        assert response.status_code == 302
+        interviewer.user.refresh_from_db()
+        assert interviewer.user.check_password("newpass456!")
+
+    def test_password_change_requires_correct_old_password(self, client, interviewer):
+        client.force_login(interviewer.user)
+        response = client.post(
+            reverse("dashboard:password_change"),
+            {
+                "old_password": "wrongpassword",
+                "new_password1": "newpass456!",
+                "new_password2": "newpass456!",
+            },
+        )
+        assert response.status_code == 200
+        interviewer.user.refresh_from_db()
+        assert interviewer.user.check_password("testpass123")
+
+    def test_password_change_stays_logged_in(self, client, interviewer):
+        client.force_login(interviewer.user)
+        client.post(
+            reverse("dashboard:password_change"),
+            {
+                "old_password": "testpass123",
+                "new_password1": "newpass456!",
+                "new_password2": "newpass456!",
+            },
+        )
+        response = client.get(reverse("dashboard:home"))
+        assert response.status_code == 200
+
     def test_booking_detail_loads(self, client, interviewer):
         booking = BookingFactory(interviewer=interviewer)
         client.force_login(interviewer.user)

@@ -1,5 +1,7 @@
 from django.contrib import messages
+from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordChangeForm
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 
@@ -99,6 +101,43 @@ def profile_edit(request):
             "technologies": technologies,
             "subjects": subjects,
             "languages": languages,
+            "password_form": PasswordChangeForm(request.user),
+        },
+    )
+
+
+@login_required
+def password_change(request):
+    """Let a logged-in user change their own password."""
+    form = PasswordChangeForm(request.user, request.POST or None)
+
+    if request.method == "POST" and form.is_valid():
+        user = form.save()
+        update_session_auth_hash(request, user)
+        messages.success(request, "Password updated successfully!")
+        form = PasswordChangeForm(request.user)
+
+        if request.headers.get("HX-Request"):
+            return render(request, "dashboard/partials/password_form.html", {"form": form})
+        return redirect("dashboard:profile")
+
+    if request.headers.get("HX-Request"):
+        return render(request, "dashboard/partials/password_form.html", {"form": form})
+
+    if not hasattr(request.user, "interviewer"):
+        messages.error(request, "You don't have an interviewer profile.")
+        return redirect("pages:home")
+
+    interviewer = request.user.interviewer
+    return render(
+        request,
+        "dashboard/profile.html",
+        {
+            "interviewer": interviewer,
+            "technologies": Technology.objects.all(),
+            "subjects": InterviewSubject.objects.all(),
+            "languages": HumanLanguage.objects.all(),
+            "password_form": form,
         },
     )
 
