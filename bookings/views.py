@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 def booking_start(request, interviewer_id):
     """Show cal.com embed for selecting a time slot."""
     interviewer = get_object_or_404(
-        Interviewer.objects.exclude(cal_event_type_id=""), pk=interviewer_id, is_active=True
+        Interviewer.objects.exclude(cal_link=""), pk=interviewer_id, is_active=True
     )
     return render(
         request,
@@ -32,7 +32,7 @@ def booking_form(request, interviewer_id):
     Expects 'datetime' query parameter from cal.com callback.
     """
     interviewer = get_object_or_404(
-        Interviewer.objects.exclude(cal_event_type_id=""), pk=interviewer_id, is_active=True
+        Interviewer.objects.exclude(cal_link=""), pk=interviewer_id, is_active=True
     )
     scheduled_at = request.GET.get("datetime")
 
@@ -62,7 +62,7 @@ def booking_form(request, interviewer_id):
 def create_booking(request, interviewer_id):
     """Create a booking and redirect to Stripe checkout."""
     interviewer = get_object_or_404(
-        Interviewer.objects.exclude(cal_event_type_id=""), pk=interviewer_id, is_active=True
+        Interviewer.objects.exclude(cal_link=""), pk=interviewer_id, is_active=True
     )
 
     # Parse scheduled datetime

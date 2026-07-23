@@ -33,7 +33,7 @@ Clicking a user will open a modal with more information about them, as well a bu
 
 ### 3. Booking Flow
 
-This page will show the availability of the interviewer using a cal.com widget, connected to a custom "Event Type" in cal.com. Upon selection of a date and time, the user will be directed to a payment flow in Stripe. During this flow, our Satisfaction Guarantee will be explained, which is a 100% money back guarantee if they didn't find value in the interview and the feedback provided after.
+This page will show the availability of the interviewer using a cal.com widget, connected to a custom event type in cal.com via that interviewer's cal.com link (e.g. `username/event-slug`). Upon selection of a date and time, the user will be directed to a payment flow in Stripe. During this flow, our Satisfaction Guarantee will be explained, which is a 100% money back guarantee if they didn't find value in the interview and the feedback provided after.
 
 Here will also be explained the service in detail, which is a one hour technical interview for a specific set of technologies and interview subject (e.g. frontend interview for react, backend interview for Python and FastAPI) followed with by a 30 minute feedback session.
 
@@ -57,7 +57,7 @@ On the admin panel, an interviewer can see their upcoming interviews, edit the p
 
 **Email:** Django's built-in email backend with an SMTP transactional email service (e.g., Resend or Mailgun). Confirmation emails sent after successful Stripe payment.
 
-**Cal.com Integration:** Each interviewer has a `cal_event_type_id` field stored in their profile. The booking page embeds the cal.com widget for that specific Event Type.
+**Cal.com Integration:** Each interviewer has a `cal_link` field (e.g. `username/event-slug`) stored in their profile. The booking page embeds the cal.com widget using that link as the embed SDK's `calLink`.
 
 **Development:**
 - Docker Compose dev file spins up PostgreSQL and MinIO

@@ -52,7 +52,7 @@ class InterviewerFactory(factory.django.DjangoModelFactory):
 
     user = factory.SubFactory(UserFactory)
     bio = factory.Faker("paragraph")
-    cal_event_type_id = factory.Sequence(lambda n: f"event-type-{n}")
+    cal_link = factory.Sequence(lambda n: f"interviewer-{n}/mock-interview")
     hourly_rate = Decimal("150.00")
     is_active = True
     companies = "Google, Meta, Amazon"

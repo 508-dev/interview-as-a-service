@@ -5,7 +5,7 @@ from .models import HumanLanguage, Interviewer, InterviewSubject, Technology
 
 def interviewer_list(request):
     """List all active interviewers with optional filtering."""
-    interviewers = Interviewer.objects.filter(is_active=True).exclude(cal_event_type_id="")
+    interviewers = Interviewer.objects.filter(is_active=True).exclude(cal_link="")
 
     # Filter by technology
     tech_slug = request.GET.get("technology")
@@ -53,7 +53,7 @@ def interviewer_list(request):
 
 def featured_interviewers(request):
     """Return featured interviewers for HTMX partial load."""
-    interviewers = Interviewer.objects.filter(is_active=True).exclude(cal_event_type_id="")[:6]
+    interviewers = Interviewer.objects.filter(is_active=True).exclude(cal_link="")[:6]
     return render(
         request,
         "interviewers/partials/grid.html",
@@ -64,7 +64,7 @@ def featured_interviewers(request):
 def interviewer_detail_modal(request, pk):
     """Return interviewer detail modal for HTMX."""
     interviewer = get_object_or_404(
-        Interviewer.objects.exclude(cal_event_type_id=""), pk=pk, is_active=True
+        Interviewer.objects.exclude(cal_link=""), pk=pk, is_active=True
     )
     return render(
         request,

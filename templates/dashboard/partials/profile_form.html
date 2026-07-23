@@ -1,7 +1,7 @@
 <div id="profile-form-content" class="profile-form-content">
     {% if not interviewer.is_bookable %}
     <div class="message message-error">
-        Your profile is hidden from the public site until you set a Cal.com Event Type ID below.
+        Your profile is hidden from the public site until you set a Cal.com link below.
     </div>
     {% endif %}
 
@@ -49,13 +49,13 @@
     </div>
 
     <div class="form-group">
-        <label for="cal_event_type_id">Cal.com Event Type ID</label>
+        <label for="cal_link">Cal.com Link</label>
         <input type="text"
-               id="cal_event_type_id"
-               name="cal_event_type_id"
-               value="{{ interviewer.cal_event_type_id }}"
-               placeholder="e.g. 123456">
-        <p class="form-help">Found in your Cal.com event type's URL or settings. Required for your profile to appear on the public site.</p>
+               id="cal_link"
+               name="cal_link"
+               value="{{ interviewer.cal_link }}"
+               placeholder="e.g. calebjay/mock-interview">
+        <p class="form-help">Your Cal.com username and event slug, found in your event type's booking page URL (cal.com/&lt;username&gt;/&lt;event-slug&gt;). Required for your profile to appear on the public site.</p>
     </div>
 
     <div class="form-group">

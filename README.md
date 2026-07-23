@@ -131,7 +131,7 @@ user.save()
 interviewer = Interviewer.objects.create(
     user=user,
     bio="10 years at Google, expert in distributed systems.",
-    cal_event_type_id="jane-doe/interview",
+    cal_link="jane-doe/interview",
     hourly_rate=150.00,
     companies="Google, Meta, Stripe"
 )

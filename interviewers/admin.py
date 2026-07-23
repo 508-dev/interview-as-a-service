@@ -34,7 +34,7 @@ class InterviewerAdmin(admin.ModelAdmin):
     fieldsets = [
         (None, {"fields": ["user", "is_active"]}),
         ("Profile", {"fields": ["bio", "photo", "companies"]}),
-        ("Booking", {"fields": ["cal_event_type_id", "hourly_rate"]}),
+        ("Booking", {"fields": ["cal_link", "hourly_rate"]}),
         ("Skills", {"fields": ["technologies", "subjects", "languages"]}),
         ("ToS Acceptance", {"fields": ["tos_accepted_version", "tos_accepted_at"]}),
         ("Timestamps", {"fields": ["created_at", "updated_at"]}),

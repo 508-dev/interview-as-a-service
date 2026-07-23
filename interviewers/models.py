@@ -51,11 +51,11 @@ class Interviewer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="interviewer")
     bio = models.TextField(help_text="Brief biography and experience")
     photo = models.ImageField(upload_to="interviewers/", blank=True)
-    cal_event_type_id = models.CharField(
+    cal_link = models.CharField(
         max_length=100,
         blank=True,
         default="",
-        help_text="Cal.com Event Type ID for booking. Profile is hidden from the public site until this is set.",
+        help_text="Cal.com link for booking, e.g. 'username/event-slug'. Profile is hidden from the public site until this is set.",
     )
     hourly_rate = models.DecimalField(
         max_digits=6,
@@ -115,7 +115,7 @@ class Interviewer(models.Model):
 
     @property
     def is_bookable(self):
-        return self.is_active and bool(self.cal_event_type_id)
+        return self.is_active and bool(self.cal_link)
 
     @property
     def company_list(self):
