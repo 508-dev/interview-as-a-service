@@ -10,6 +10,7 @@
                 <a href="{% url 'dashboard:home' %}">Dashboard</a>
                 <a href="{% url 'accounts:logout' %}">Logout</a>
             {% else %}
+                <a href="{% url 'accounts:register' %}">Become an Interviewer</a>
                 <a href="{% url 'accounts:login' %}">Interviewer Login</a>
             {% endif %}
         </nav>

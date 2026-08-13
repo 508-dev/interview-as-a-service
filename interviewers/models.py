@@ -48,7 +48,17 @@ class HumanLanguage(models.Model):
 class Interviewer(models.Model):
     """Interviewer profile linked to Django auth user."""
 
+    class ApprovalStatus(models.TextChoices):
+        PENDING = "pending", "Pending"
+        APPROVED = "approved", "Approved"
+
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="interviewer")
+    approval_status = models.CharField(
+        max_length=20,
+        choices=ApprovalStatus.choices,
+        default=ApprovalStatus.PENDING,
+        help_text="Whether this interviewer has been approved to use the platform.",
+    )
     bio = models.TextField(help_text="Brief biography and experience")
     photo = models.ImageField(upload_to="interviewers/", blank=True)
     cal_link = models.CharField(
@@ -112,6 +122,10 @@ class Interviewer(models.Model):
     @property
     def has_accepted_current_tos(self):
         return self.tos_accepted_version == CURRENT_TOS_VERSION
+
+    @property
+    def is_approved(self):
+        return self.approval_status == self.ApprovalStatus.APPROVED
 
     @property
     def is_bookable(self):

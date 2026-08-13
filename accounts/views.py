@@ -6,7 +6,10 @@ from django.shortcuts import redirect, render
 from django.utils import timezone
 from django.utils.http import url_has_allowed_host_and_scheme
 
-from interviewers.models import CURRENT_TOS_VERSION
+from interviewers.emails import send_registration_notification
+from interviewers.models import CURRENT_TOS_VERSION, Interviewer
+
+from .forms import RegistrationForm
 
 
 def login_view(request):
@@ -31,6 +34,51 @@ def logout_view(request):
     """Logout view."""
     logout(request)
     return redirect("pages:home")
+
+
+def register_view(request):
+    """Let a prospective interviewer request an account.
+
+    Creates the User and a pending Interviewer profile, then logs them in --
+    dashboard access itself stays blocked (see
+    interviewers.middleware.ApprovalRequiredMiddleware) until an admin
+    approves the account from Django admin.
+    """
+    if request.user.is_authenticated:
+        return redirect("dashboard:home")
+
+    if request.method == "POST":
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            interviewer = Interviewer.objects.create(
+                user=user,
+                bio="",
+                hourly_rate=0,
+                approval_status=Interviewer.ApprovalStatus.PENDING,
+            )
+            login(request, user)
+            send_registration_notification(interviewer, request)
+            messages.success(request, "Thanks for applying! We'll review your request shortly.")
+            return redirect("dashboard:home")
+    else:
+        form = RegistrationForm()
+
+    return render(request, "accounts/register.html", {"form": form})
+
+
+@login_required
+def pending_approval_view(request):
+    """Shown to a logged-in interviewer whose account isn't approved yet."""
+    interviewer = getattr(request.user, "interviewer", None)
+    if interviewer is None:
+        messages.error(request, "You don't have an interviewer profile.")
+        return redirect("pages:home")
+
+    if interviewer.is_approved:
+        return redirect("dashboard:home")
+
+    return render(request, "accounts/pending_approval.html")
 
 
 def _safe_next_url(request):

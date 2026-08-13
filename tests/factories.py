@@ -55,6 +55,7 @@ class InterviewerFactory(factory.django.DjangoModelFactory):
     cal_link = factory.Sequence(lambda n: f"interviewer-{n}/mock-interview")
     hourly_rate = Decimal("150.00")
     is_active = True
+    approval_status = Interviewer.ApprovalStatus.APPROVED
     companies = "Google, Meta, Amazon"
     tos_accepted_version = CURRENT_TOS_VERSION
     tos_accepted_at = factory.LazyAttribute(lambda obj: timezone.now() if obj.tos_accepted_version else None)

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Application Pending - 508.dev Interview Service{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container" style="max-width: 500px;">
+        <div class="section-header">
+            <h1>Application Pending</h1>
+            <p>
+                Thanks for applying! Your account has been created, but an admin still needs to
+                review and approve your request before you can access the dashboard. We'll email
+                you at {{ request.user.email }} once you're approved.
+            </p>
+        </div>
+
+        <a href="{% url 'accounts:logout' %}" class="btn btn-secondary">Log Out</a>
+    </div>
+</section>
+{% endblock %}
